@@ -1,0 +1,3 @@
+com\wgml\itmall\interceptor\AuthInterceptor.class
+com\wgml\itmall\interceptor\WebMvcConfiguration.class
+com\wgml\itmall\interceptor\LoginRequire.class

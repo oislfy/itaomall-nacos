@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active: dev
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false #开发的时候禁用缓存
+    mode: LEGACYHTML5
+  datasource:
+    url: jdbc:mysql://192.168.72.139:3330/itaomall?characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: rootitmall
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: 192.168.72.139
+    port: 6379
+    database: 0
+
+#  level:
+#    com:
+#      wgml:
+#        itmall: debug
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+swagger2:
+  enabled: true
+

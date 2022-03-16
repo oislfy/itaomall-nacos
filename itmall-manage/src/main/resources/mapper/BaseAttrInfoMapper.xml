@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wgml.itmall.manage.mapper.BaseAttrInfoMapper">
+<!--    autoMapping自动映射 相同的类属性名和数据库表字段名-->
+    <resultMap id="baseAttrInfoMap" type="com.wgml.itmall.bean.manage.BaseAttrInfo" autoMapping="true">
+        <id column="id" property="id"></id>
+<!--        一对多-->
+        <collection ofType="com.wgml.itmall.bean.manage.BaseAttrValue" property="attrValueList" autoMapping="true">
+            <id property="id" column="attr_value_id"></id>
+        </collection>
+<!--     多对一   <association></association>-->
+    </resultMap>
+    <select id="getBaseAttrInfoListByCatalog3Id" resultMap="baseAttrInfoMap">
+        SELECT
+            bai.id,
+            bai.attr_name,
+            bai.catalog3_id,
+            bav.id attr_value_id,
+            bav.value_name,
+            bav.attr_id
+        FROM
+            base_attr_info bai
+                INNER JOIN base_attr_value bav ON bai.id = bav.attr_id
+        WHERE
+            catalog3_id = #{0}
+
+    </select>
+
+    <select id="selectAttrInfoListByIds" resultMap="baseAttrInfoMap">
+        SELECT bai.id,
+               bai.attr_name,
+               bai.catalog3_id,
+               bav.id attr_value_id,
+               bav.value_name,
+               bav.attr_id
+        from base_attr_info bai
+        INNER JOIN base_attr_value bav ON bai.id=bav.attr_id
+        WHERE bav.id in (${valueIds});
+    </select>
+</mapper>

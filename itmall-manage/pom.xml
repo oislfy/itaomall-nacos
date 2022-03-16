@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.wgml.nacos.itmall</groupId>
+    <artifactId>itmall-manage</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <parent>
+        <groupId>com.wgml.nacos</groupId>
+        <artifactId>itmall-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../itmall-parent/pom.xml</relativePath>
+    </parent>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.wgml.nacos</groupId>
+            <artifactId>itmall-service-utils</artifactId>
+            <version>${parent.version}</version>
+            <!--排除不需要的依赖-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-activemq</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-pool</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.wgml.nacos</groupId>
+            <artifactId>itmall-common-api</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+    </dependencies>
+
+    <!--spring boot打包的话需要指定一个唯一的入门 -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${boot.version}</version>
+<!--                <configuration>-->
+<!--                    &lt;!&ndash; 指定该Main Class为全局的唯一入口 &ndash;&gt;-->
+<!--                    <mainClass>com.wgml.itmall.manage.ItmallManageMain8502</mainClass>-->
+<!--                    <layout>ZIP</layout>-->
+<!--                </configuration>-->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal><!--可以把依赖的包都打包到生成的Jar包中 -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--docker镜像build插件-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.2.0</version>
+                <!--将插件绑定在某个phase执行-->
+                <executions>
+                    <execution>
+                        <id>build-image</id>
+                        <!--将插件绑定在package这个phase上。也就是说，
+                        用户只需执行mvn package ，就会自动执行mvn docker:build-->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- 注意imageName一定要是符合正则[a-z0-9-_.]的，否则构建不会成功 上传到阿里云镜像命名规范-->
+                    <imageName>registry.cn-guangzhou.aliyuncs.com/wugumaolu-oislfy/${project.artifactId}</imageName>
+<!--                    <imageTags>-->
+<!--                        <imageTag>latest</imageTag>-->
+<!--                    </imageTags>-->
+                    <!-- 指定我们项目中Dockerfile文件的路径-->
+                    <dockerDirectory>${project.basedir}/src/main/resources</dockerDirectory>
+                    <!--指定远程docker 地址-->
+                    <dockerHost>http://192.168.72.139:2375</dockerHost>
+                    <rm>true</rm>
+                    <!-- 这里是复制 jar 包到 docker 容器指定目录配置 -->
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <!--jar包所在的路径  此处配置的即对应项目中target目录-->
+                            <directory>${project.build.directory}</directory>
+                            <!-- 需要包含的 jar包 ，这里对应的是 Dockerfile中添加的文件名　-->
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

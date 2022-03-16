@@ -1,0 +1,42 @@
+spring:
+  profiles:
+    active: dev
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false #开发的时候禁用缓存
+    mode: LEGACYHTML5
+  datasource:
+    url: jdbc:mysql://192.168.72.139:3330/itaomall?characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: rootitmall
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: 192.168.72.139
+    port: 6380
+    database: 0
+    timeout: 1800000ms
+    password: itmallredis
+    lettuce:
+      pool:
+        max-active: 20
+        max-wait: -1ms
+        max-idle: 10
+        min-idle: 0
+
+
+
+#logging:
+#  level:
+#    com:
+#      wgml:
+#        itmall: debug
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+swagger2:
+  enabled: true
+
+

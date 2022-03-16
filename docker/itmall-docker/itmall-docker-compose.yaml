@@ -1,0 +1,123 @@
+version: "3"
+services:
+  nacos:
+    image: nacos/nacos-server:${NACOS_VERSION}
+    env_file:
+      - ./env/nacos-standlone-mysql.env
+    volumes:
+      - ./nacos/nacos-standalone-logs/:/home/nacos/logs
+      - ./nacos/init.d/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9555:9555"
+    depends_on:
+      - mysql
+    restart: on-failure
+    networks:
+      - itmall_nacos_net
+
+  mysql:
+    image: nacos/nacos-mysql:5.7
+    env_file:
+      - ./env/mysql.env
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/conf:/etc/mysql/conf.d
+    ports:
+      - "3330:3306"
+    networks:
+      - itmall_nacos_net
+
+  sentinel:
+    build:
+      context: ./
+      dockerfile: Dockerfile-sentinel
+    volumes:
+      - ./sentinel:/usr/local
+    ports:
+      - "8877:8080"
+      - "8719:8719"
+      - "8720:8720"
+    restart: always
+    networks:
+      - itmall_nacos_net
+
+  #  redis:
+  #    image: redis:3.2.8
+  #    volumes:
+  #      - ./redis:/usr/local/redis:rw
+  #    ports:
+  #      - "6379:6379"
+  #    restart: always
+  #    networks:
+  #      - itmall_nacos_net
+  redis:
+    image: redis:6.2.1
+    #    env_file:
+    #      - ./env/redis.env
+    volumes:
+      - ./redis/conf:/usr/local/etc/redis
+    ports:
+      - "6380:6379"
+    restart: always
+    networks:
+      - itmall_nacos_net
+    #设置密码
+    command: redis-server --requirepass itmallredis  --appendonly yes
+
+
+
+  elasticsearch:
+    image: elasticsearch:7.6.2
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    env_file:
+      - ./env/elasticsearch.env
+    networks:
+      - itmall_nacos_net
+    volumes:
+      - ./es/plugins:/usr/share/elasticsearch/plugins
+    restart: always
+
+  kibana:
+    image: kibana:7.6.2
+    ports:
+      - "5601:5601"
+    networks:
+      - itmall_nacos_net
+    depends_on:
+      - elasticsearch
+    restart: always
+
+
+
+
+#  activemq:
+#    image: oislfy/activemq:5.14.3
+#    restart: always
+#    ports:
+#      - "8161:8161"
+#      - "61616:61616"
+#      - "61613:61613"
+#    env_file:
+#      - ./env/activemq.env
+#    volumes:
+#      - ./activemq/activemqdata:/data
+#      - ./activemq/activemqlog:/var/log/activemq
+#
+#  nginx:
+#    image: nginx:1.20.1
+#    restart: always
+#    networks:
+#      - itmall_nacos_net
+#    ports:
+#      - "80:80"
+#    volumes:
+#      - ./nginx/data:/usr/share/nginx:rw
+#      - ./nginx/conf:/etc/nginx:rw
+
+networks:
+  itmall_nacos_net:
+    driver: bridge

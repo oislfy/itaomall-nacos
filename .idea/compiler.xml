@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <option name="BUILD_PROCESS_ADDITIONAL_VM_OPTIONS" value="-Djps.track.ap.dependencies=false" />
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="itmall-manage" />
+        <module name="itmall-common-api" />
+        <module name="itmall-common-utils" />
+        <module name="itmall-commons-api" />
+        <module name="itaomall-nacos" />
+        <module name="itmall-service-utils" />
+        <module name="itmall-gateway" />
+        <module name="itmall-web-utils" />
+        <module name="itmall-user" />
+        <module name="itmall-list" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="itmall-commons-api" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="itmall-common-api" options="" />
+      <module name="itmall-common-utils" options="" />
+      <module name="itmall-gateway" options="" />
+      <module name="itmall-service-utils" options="" />
+      <module name="itmall-user" options="" />
+      <module name="itmall-web-utils" options="" />
+    </option>
+  </component>
+</project>

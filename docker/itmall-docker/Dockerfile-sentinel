@@ -1,0 +1,10 @@
+FROM java:8
+VOLUME /tmp
+ADD ./jar/sentinel-dashboard-1.8.2.jar /app.jar
+ENV MYPATH  /usr/local
+WORKDIR $MYPATH
+CMD ["--server.port=8080"]
+EXPOSE 8080
+EXPOSE 8719
+EXPOSE 8720
+ENTRYPOINT ["java","-Xms256m","-Xmx256m","-jar","/app.jar"]

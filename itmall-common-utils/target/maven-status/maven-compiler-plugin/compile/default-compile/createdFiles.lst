@@ -1,0 +1,3 @@
+com\wgml\itmall\config\Swagger2Config.class
+com\wgml\itmall\support\EnableActiveMQ.class
+com\wgml\itmall\support\ActiveMqSupport.class

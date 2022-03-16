@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.wgml.nacos.itmall</groupId>
+    <artifactId>itmall-list</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <parent>
+        <groupId>com.wgml.nacos</groupId>
+        <artifactId>itmall-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../itmall-parent/pom.xml</relativePath>
+    </parent>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <elasticsearch.version>7.6.1</elasticsearch.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.wgml.nacos</groupId>
+            <artifactId>itmall-service-utils</artifactId>
+            <version>${parent.version}</version>
+            <!--排除不需要的依赖-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-activemq</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-pool</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jdbc</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mybatis.spring.boot</groupId>
+                    <artifactId>mybatis-spring-boot-starter</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.wgml.nacos</groupId>
+            <artifactId>itmall-common-api</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <!--        elasticsearch start  -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+
+        <!-- jsoup解析页面 -->
+        <!-- 解析网页 爬视频可 研究tiko -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+        </dependency>
+
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/io.searchbox/jest &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>io.searchbox</groupId>-->
+        <!--            <artifactId>jest</artifactId>-->
+        <!--        </dependency>-->
+
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/net.java.dev.jna/jna &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>net.java.dev.jna</groupId>-->
+        <!--            <artifactId>jna</artifactId>-->
+        <!--        </dependency>-->
+
+        <!--        elasticsearch end  -->
+    </dependencies>
+
+</project>

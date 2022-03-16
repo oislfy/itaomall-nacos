@@ -1,0 +1,82 @@
+server:
+  port: 8502
+
+spring:
+  application:
+    name: itmall-manage
+  cloud:
+    nacos:
+      discovery:
+        #Nacos服务注册中心地址
+        server-addr: 192.168.72.139:8848
+        namespace: dev-id
+        username: ${spring.cloud.nacos.username}
+        password: ${spring.cloud.nacos.password}
+      config:
+        server-addr: 192.168.72.139:8848 #Nacos作为配置中心地址
+        file-extension: yaml #指定yaml格式的配置
+        namespace: dev-id
+        group: DEV_GROUP
+        username: nacos
+        password: nacos
+    sentinel:
+      transport:
+        #配置Sentinel dashboard地址
+        dashboard: 192.168.72.139:8877
+        #默认8719端口，假如被占用会自动从8719开始依次+1扫描,直至找到未被占用的端口
+        port: 8719
+        client-ip: 192.168.72.1
+      # sentinel持久化到nacos
+      datasource:
+        #1.8+版本sentinel
+        flow:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            dataId: ${spring.application.name}-flow-rules
+            namespace: ${spring.cloud.nacos.discovery.namespace}
+            groupId: DEV_GROUP
+            data-type: json
+            rule-type: flow
+            username: ${spring.cloud.nacos.username}
+            password: ${spring.cloud.nacos.password}
+        degrade:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            data-id: ${spring.application.name}-degrade-rules
+            group-id: DEFAULT_GROUP
+            data-type: json
+            rule-type: degrade
+            username: ${spring.cloud.nacos.username}
+            password: ${spring.cloud.nacos.password}
+          #1.7.0sentinel
+#        ds1:
+#          nacos:
+#            server-addr: 192.168.72.139:8848
+#            dataId: itmall-manage-sentinel
+#            namespaceId: dev-id
+#            groupId: DEV_GROUP
+#            data-type: json
+#            rule-type: flow
+
+
+
+feign:
+  hystrix:
+    enabled: false #默认，可以不写 禁用feign的hystrix功能，改用sentinel的
+  sentinel:
+    enabled: true   #激活Sentinel对Feign的支持,熔断降级
+ribbon:
+  ReadTimeout: 5000
+  ConnectTimeout: 5000
+
+#暴露端点 sentinel nacos 用到
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+
+
+
+
